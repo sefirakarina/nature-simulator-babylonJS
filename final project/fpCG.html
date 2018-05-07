@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="wadsFp.css">
+    <script type="text/javascript" src="bootstrap/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+    <title>fp</title>
+    <script type="text/javascript" src="babylon.custom2.js"></script>
+    <link rel="stylesheet" type="text/css" href="Canvas.css"/>
+</head>
+<body style="background-color: black;">
+   <div>
+       <button type="button" id="daytime" class="btn btn-default">daytime</button>
+       <button type="button" id="sunset" class="btn btn-default">sunset</button>
+       <button type="button" id="rain" class="btn btn-default">rain</button>
+       <button type="button" id="snow" class="btn btn-default">snow</button>
+   </div>
+<canvas id="renderCanvas"></canvas>
+<script>
+    var canvas; 
+    var scene; 
+    var camera; 
+    var ground;
+    document.addEventListener("DOMContentLoaded", function() {
+        //Get canvas
+        canvas = document.getElementById("renderCanvas");
+        
+        //Create Babylon Engine
+        engine = new BABYLON.Engine(canvas, true);
+
+        //Create scene. Scene: Like a level in a game
+        scene = new BABYLON.Scene(engine);
+
+        // Camera
+        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(5, 4, -47), scene);
+        camera.setTarget(BABYLON.Vector3.Zero());
+        camera.attachControl(canvas, true);
+    
+        // Light
+        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    
+        // Ground
+        // var ground = BABYLON.Mesh.CreateGroundFromHeightMap("ground", "textures/dirt_01.png", 100, 100, 100, 0, 10, scene, false);
+        ground = new BABYLON.Mesh.CreateGround("ground", 16*30, 16*30, 30, scene);
+        var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
+        groundMaterial.diffuseTexture = new BABYLON.Texture("textures/dirt_01.png", scene);
+        groundMaterial.diffuseTexture.uScale = 6;
+        groundMaterial.diffuseTexture.vScale = 6;
+        groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        ground.position.y = -2.05;
+        ground.material = groundMaterial;
+    
+        // Sky material
+        var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", scene);
+        skyboxMaterial.backFaceCulling = false;
+        //skyboxMaterial._cachedDefines.FOG = true;
+
+        // Sky mesh (box)
+        var skybox = BABYLON.Mesh.CreatePlane("sky", 500.0, scene);
+        skybox.position = new BABYLON.Vector3(0, 50, 0);
+        skybox.material = skyboxMaterial;
+    
+        var setSkyConfig = function (property, from, to) {
+            var keys = [
+                { frame: 0, value: from },
+                { frame: 100, value: to }
+            ];
+        
+            var animation = new BABYLON.Animation("animation", property, 100, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+            animation.setKeys(keys);
+        
+            scene.stopAnimation(skybox);
+            scene.beginDirectAnimation(skybox, [animation], 0, 100, false, 1);
+        };
+    
+
+        // Set to Day
+        setSkyConfig("material.inclination", skyboxMaterial.inclination, 0);
+
+        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+      /*  var panel = new BABYLON.GUI.StackPanel();
+        panel.width = "200px";
+        panel.isVertical = false;
+        panel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        advancedTexture.addControl(panel);
+
+        var checkbox = new BABYLON.GUI.Checkbox();
+        checkbox.width = "20px";
+        checkbox.height = "20px";
+        checkbox.isChecked = true;
+        checkbox.color = "green";
+        checkbox.onIsCheckedChangedObservable.add(function(value) {
+            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
+     });
+        panel.addControl(checkbox);    
+
+        var header = new BABYLON.GUI.TextBlock();
+        header.text = "sunset";
+        header.width = "180px";
+        header.marginLeft = "5px";
+        header.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        header.color = "white";
+        panel.addControl(header); */
+
+
+    /* function bla() {
+        setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
+    }*/
+        document.getElementById("daytime").onclick = function () { 
+            setSkyConfig("material.inclination", skyboxMaterial.inclination, 0);
+        };
+    
+        document.getElementById("sunset").onclick = function () { 
+            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
+        };
+
+        function bla() {
+            var postProcess = new BABYLON.DigitalRainPostProcess("DigitalRain", camera, 
+            {
+                font: "3px Monospace",
+                mixToNormal: 0.5,
+                mixToTile: 0.5        
+            });
+        //postProcess.setVisible=false;
+            window.setTimeout(function () {
+                scene.registerBeforeRender(function() {
+                    postProcess.mixToNormal = 1; 
+                });
+            }, 10000);
+        }
+
+        document.getElementById("rain").onclick =bla;
+
+        document.getElementById("snow").onclick = function () { 
+            var particleSystem = new BABYLON.ParticleSystem("particles", 10000, scene);
+        
+            //Texture of each particle
+            particleSystem.particleTexture = new BABYLON.Texture("textures/flare.png", scene);
+        
+            // Where the particles come from
+            particleSystem.emitter = skybox; // the starting object, the emitter
+            particleSystem.minEmitBox = new BABYLON.Vector3(-100, 0, -100); // Starting all from
+            particleSystem.maxEmitBox = new BABYLON.Vector3(100, 0, 100); // To...
+        
+            // Colors of all particles
+            particleSystem.color1 = new BABYLON.Color4(1, 1, 1.0, 1.0);
+            particleSystem.color2 = new BABYLON.Color4(1, 1, 1.0, 0.5);
+            particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0.0);
+        
+            // Size of each particle (random between...
+            particleSystem.minSize = 0.1;
+            particleSystem.maxSize = 0.5;
+        
+            // Life time of each particle (random between...
+            particleSystem.minLifeTime = 0.3;
+            particleSystem.maxLifeTime = 15;
+        
+            // Emission rate
+            particleSystem.emitRate = 15000;
+        
+            // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
+            particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+        
+            // Set the gravity of all particles
+            particleSystem.gravity = new BABYLON.Vector3(0, -9.81, 0);
+        
+            // Direction of each particle after it has been emitted
+            particleSystem.direction1 = new BABYLON.Vector3(-7, -8, 3);
+            particleSystem.direction2 = new BABYLON.Vector3(7, -8, -3);
+        
+        
+        
+            // Speed
+            particleSystem.minEmitPower = 1;
+            particleSystem.maxEmitPower = 3;
+            particleSystem.updateSpeed = 0.005;
+        
+            // Start the particle system
+            particleSystem.start();
+
+            window.setTimeout(function () {
+                particleSystem.stop();
+            }, 10000);
+        };
+
+        /*document.getElementById("rain").onclick = function () { 
+            var postProcess = new BABYLON.DigitalRainPostProcess("DigitalRain", camera, 
+            {
+                font: "3px Monospace",
+                mixToNormal: 0.5,
+                mixToTile: 0.5        
+            });
+        };*/
+      /*  robotMain=new BABYLON.Mesh.CreateBox("robotMain",1.0,scene);
+        robotMain.isVisible=false;
+        robotMain.position.y=3;
+
+        /*BABYLON.SceneLoader.ImportMesh("","models/Vanquish/","coconut-tree.obj",scene,
+            function(newMeshes){
+                for(i=0; i<newMeshes; i++){
+                    newMeshes[i].parent=robotMain;
+                }
+            });*/
+       /* BABYLON.SceneLoader.ImportMesh("", "models/Vanquish/", "coconut-tree.obj", scene, function (newMeshes) {
+        // Set the target of the camera to the first imported mesh
+             camera.target = newMeshes[0];
+             newMeshes[0].scale.x=10;
+             newMeshes[0].scale.y=10;
+             newMeshes[0].scale.z=10;
+        });*/
+
+        	
+
+        engine.runRenderLoop(function(){
+
+            
+            scene.render();
+        });
+
+
+        /*engine.runRenderLoop(function(){
+            //box.position.x = box.position.x + 0.05; //The box moves to the right
+            scene.render();
+        });*/
+    });
+
+</script>
+
+</body>
+</html>
