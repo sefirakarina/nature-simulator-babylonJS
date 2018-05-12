@@ -13,12 +13,7 @@
     <link rel="stylesheet" type="text/css" href="Canvas.css"/>
 </head>
 <body style="background-color: black;">
-   <div>
-       <button type="button" id="daytime" class="btn btn-default">daytime</button>
-       <button type="button" id="sunset" class="btn btn-default">sunset</button>
-       <button type="button" id="rain" class="btn btn-default">rain</button>
-       <button type="button" id="snow" class="btn btn-default">snow</button>
-   </div>
+
 <canvas id="renderCanvas"></canvas>
 <script>
     var canvas; 
@@ -61,17 +56,23 @@
         //skyboxMaterial._cachedDefines.FOG = true;
 
         // Sky mesh (box)
-        var skybox = BABYLON.Mesh.CreatePlane("sky", 500.0, scene);
+        var skybox = BABYLON.Mesh.CreatePlane("sky", 1000.0, scene);
         skybox.position = new BABYLON.Vector3(0, 50, 0);
         skybox.material = skyboxMaterial;
     
         var setSkyConfig = function (property, from, to) {
             var keys = [
-                { frame: 0, value: from },
-                { frame: 100, value: to }
+                { 
+                    frame: 0, 
+                    value: from 
+                },
+                { 
+                    frame: 5, 
+                    value: to 
+                }
             ];
         
-            var animation = new BABYLON.Animation("animation", property, 100, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+            var animation = new BABYLON.Animation("animation", property, 5, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
             animation.setKeys(keys);
         
             scene.stopAnimation(skybox);
@@ -80,13 +81,13 @@
     
 
         // Set to Day
-        setSkyConfig("material.inclination", skyboxMaterial.inclination, 0);
+        setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.2);
 
        // var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
        // Water
-        var waterMesh1 = BABYLON.Mesh.CreatePlane("test", 100, scene); 
-        waterMesh1.rotation.x = 1.57;
+        var river = BABYLON.Mesh.CreatePlane("test", 100, scene); 
+        river.rotation.x = 1.57;
         //waterMesh1.rotation.x += Math.PI/2;
 
     
@@ -97,9 +98,10 @@
         water.waveHeight = 0.1;// Represents the height of the waves
         water.bumpHeight = 2; 
         water.waveLength = 0.5;
-        waterMesh1.scaling.y=0.7; // ukuran lebar
-        waterMesh1.scaling.x=6; // ukuran panjang
-        waterMesh1.position.z = -120; //deket jauhnya ke dpan belakang (kalo mo jauhan/deketan ke camera)
+
+        river.scaling.y=0.7; // ukuran lebar
+        river.scaling.x=6; // ukuran panjang
+        river.position.z = -120; //deket jauhnya ke dpan belakang (kalo mo jauhan/deketan ke camera)
         //waterMesh1.alpha=0.5;
         water.colorBlendFactor = 0;
         water.windDirection = new BABYLON.Vector2(-0.8, 0.4);// atur arah arus bisa disini
@@ -107,35 +109,104 @@
         water.addToRenderList(skybox);
         water.addToRenderList(ground);
     
-        waterMesh1.material = water;
+        river.material = water;
 
-        document.getElementById("daytime").onclick = function () { 
-            setSkyConfig("material.inclination", skyboxMaterial.inclination, 0);
-        };
-    
-        document.getElementById("sunset").onclick = function () { 
-            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
+
+        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+        //var advancedTexture2 = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI2");
+
+        var timerBackground = new BABYLON.GUI.Rectangle();
+        timerBackground.width = 0.2;
+        timerBackground.height = "40px";
+        timerBackground.cornerRadius = 20;
+        timerBackground.color = "white";
+        timerBackground.thickness = 4;
+        timerBackground.background = "green";
+        advancedTexture.addControl(timerBackground);
+
+        var label = new BABYLON.GUI.TextBlock();
+        label.text = "10";
+        timerBackground.addControl(label);
+
+        timerBackground.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        timerBackground.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+
+        var buttonDaytime = BABYLON.GUI.Button.CreateSimpleButton("buttonDaytime", "daytime");
+        buttonDaytime.width = 0.08;
+        buttonDaytime.height = 0.05;
+        buttonDaytime.top = "-45%";
+        buttonDaytime.left = "-44%";
+        buttonDaytime.color = "white";
+        buttonDaytime.fontSize = 16;
+        buttonDaytime.background = "green";
+        //var buttonEvt;
+        buttonDaytime.onPointerUpObservable.add(function () {
+            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.2);
+        });
+        advancedTexture.addControl(buttonDaytime);
+
+        var buttonSunset = BABYLON.GUI.Button.CreateSimpleButton("buttonSunset", "sunset");
+        buttonSunset.width = 0.08;
+        buttonSunset.height = 0.05;
+        buttonSunset.top = "-45%";
+        buttonSunset.left = "-35%";
+        buttonSunset.color = "white";
+        buttonSunset.fontSize = 16;
+        buttonSunset.background = "green";
+        //var buttonEvt;
+        buttonSunset.onPointerUpObservable.add(function () {
             water.bumpHeight = 0.5; 
-        };
+            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
+        });
+        advancedTexture.addControl(buttonSunset);
 
-        function bla() {
+        var buttonRain = BABYLON.GUI.Button.CreateSimpleButton("buttonRain", "rain");
+        buttonRain.width = 0.08;
+        buttonRain.height = 0.05;
+        buttonRain.top = "-45%";
+        buttonRain.left = "-26%";
+        buttonRain.color = "white";
+        buttonRain.fontSize = 16;
+        buttonRain.background = "green";
+        //var buttonEvt;
+        buttonRain.onPointerUpObservable.add(function () {
             var postProcess = new BABYLON.DigitalRainPostProcess("DigitalRain", camera, 
             {
                 font: "3px Monospace",
                 mixToNormal: 0.5,
                 mixToTile: 0.5        
             });
+            var timeleft = 10;
+
+            var downloadTimer = setInterval(function(){
+                timeleft--;
+                var n = timeleft.toString();
+                label.text = n;
+                if(timeleft <= 0){
+                    label.text = "10";
+                    clearInterval(downloadTimer);
+                    timeleft = 10;
+                }
+            },1000);
         //postProcess.setVisible=false;
             window.setTimeout(function () {
                 scene.registerBeforeRender(function() {
                     postProcess.mixToNormal = 1; 
                 });
             }, 10000);
-        }
+        });
+        advancedTexture.addControl(buttonRain);
 
-        document.getElementById("rain").onclick =bla;
-
-        document.getElementById("snow").onclick = function () { 
+        var buttonSnow = BABYLON.GUI.Button.CreateSimpleButton("buttonSnow", "snow");
+        buttonSnow.width = 0.08;
+        buttonSnow.height = 0.05;
+        buttonSnow.top = "-45%";
+        buttonSnow.left = "-17%";
+        buttonSnow.color = "white";
+        buttonSnow.fontSize = 16;
+        buttonSnow.background = "green";
+        //var buttonEvt;
+        buttonSnow.onPointerUpObservable.add(function () {
             var particleSystem = new BABYLON.ParticleSystem("particles", 10000, scene);
         
             //Texture of each particle
@@ -145,11 +216,6 @@
             particleSystem.emitter = skybox; // the starting object, the emitter
             particleSystem.minEmitBox = new BABYLON.Vector3(-100, 0, -100); // Starting all from
             particleSystem.maxEmitBox = new BABYLON.Vector3(100, 0, 100); // To...
-        
-            // Colors of all particles
-            /*particleSystem.color1 = new BABYLON.Color4(1, 1, 1.0, 1.0);
-            particleSystem.color2 = new BABYLON.Color4(1, 1, 1.0, 0.5);
-            particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0.0);*/
         
             // Size of each particle (random between...
             particleSystem.minSize = 0.1;
@@ -172,8 +238,6 @@
             particleSystem.direction1 = new BABYLON.Vector3(-7, -8, 3);
             particleSystem.direction2 = new BABYLON.Vector3(7, -8, -3);
         
-        
-        
             // Speed
             particleSystem.minEmitPower = 1;
             particleSystem.maxEmitPower = 3;
@@ -182,58 +246,26 @@
             // Start the particle system
             particleSystem.start();
 
+            var timeleft = 10;
+
+            var downloadTimer = setInterval(function(){
+                timeleft--;
+                var n = timeleft.toString();
+                label.text = n;
+                if(timeleft <= 0){
+                    label.text = "10";
+                    clearInterval(downloadTimer);
+                    timeleft = 10;
+                }
+            },1000);
+
             window.setTimeout(function () {
-            	groundMaterial.diffuseTexture = new BABYLON.Texture("textures/snow.jpg", scene);
-         		groundMaterial.alpha = 0.4;
+                groundMaterial.diffuseTexture = new BABYLON.Texture("textures/snow.jpg", scene);
+                groundMaterial.alpha = 0.4;
                 particleSystem.stop();
             }, 10000);
-        };
-
-        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-        var advancedTexture2 = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI2");
-
-        var buttonDaytime = BABYLON.GUI.Button.CreateSimpleButton("buttonDaytime", "daytime");
-        buttonDaytime.width = 0.08;
-        buttonDaytime.height = 0.05;
-        buttonDaytime.top = "-45%";
-        buttonDaytime.left = "-44%";
-        buttonDaytime.color = "white";
-        buttonDaytime.fontSize = 16;
-        buttonDaytime.background = "green";
-        //var buttonEvt;
-        buttonDaytime.onPointerUpObservable.add(function () {
-            setSkyConfig("material.inclination", skyboxMaterial.inclination, 0);
         });
-        advancedTexture.addControl(buttonDaytime);
-
-        var buttonSunset = BABYLON.GUI.Button.CreateSimpleButton("buttonSunset", "sunset");
-        buttonSunset.width = 0.08;
-        buttonSunset.height = 0.05;
-        buttonSunset.top = "-45%";
-        buttonSunset.left = "-35%";
-        buttonSunset.color = "white";
-        buttonSunset.fontSize = 16;
-        buttonSunset.background = "green";
-        //var buttonEvt;
-        buttonSunset.onPointerUpObservable.add(function () {
-            water.bumpHeight = 0.5; 
-            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
-        });
-        advancedTexture.addControl(buttonSunset);
-
-        var buttonRain = BABYLON.GUI.Button.CreateSimpleButton("buttonRain", "rain");
-        buttonSunset.width = 0.08;
-        buttonSunset.height = 0.05;
-        buttonSunset.top = "-45%";
-        buttonSunset.left = "-35%";
-        buttonSunset.color = "white";
-        buttonSunset.fontSize = 16;
-        buttonSunset.background = "green";
-        //var buttonEvt;
-        buttonSunset.onPointerUpObservable.add(function () {
-            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
-        });
-        advancedTexture.addControl(buttonSunset);
+        advancedTexture.addControl(buttonSnow);
 
          
         	
