@@ -49,7 +49,21 @@
         ground.position.y = -2.05;
         ground.material = groundMaterial;
 
-    
+        //////////////////////////// INI /////////////////////////////////////
+        var moon = BABYLON.Mesh.CreateSphere("boxCloud", 5, 11, scene);
+        moon.position = new BABYLON.Vector3(0, 35, -2);
+
+        var starMoonMaterial = new BABYLON.StandardMaterial("starMoonMat", scene);
+        var starMoonProcText = new BABYLON.CloudProceduralTexture("starMoon", 1024, scene);
+        starMoonMaterial.emissiveTexture = starMoonProcText;
+        starMoonMaterial.backFaceCulling = false;
+        starMoonMaterial.emissiveTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+
+        moon.material = starMoonMaterial;
+        moon.isVisible=false;
+
+        ////////////////////////////////////////////////////////////////////
+
         // Sky material
         var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", scene);
         skyboxMaterial.backFaceCulling = false;
@@ -57,8 +71,13 @@
 
         // Sky mesh (box)
         var skybox = BABYLON.Mesh.CreatePlane("sky", 1000.0, scene);
-        skybox.position = new BABYLON.Vector3(0, 50, 0);
+        skybox.position = new BABYLON.Vector3(0, 75, 0);
         skybox.material = skyboxMaterial;
+
+
+        var skybox2 = BABYLON.Mesh.CreatePlane("sky", 1000.0, scene);
+        skybox2.position = new BABYLON.Vector3(0, 50, 0);
+        skybox2.isVisible=false;
     
         var setSkyConfig = function (property, from, to) {
             var keys = [
@@ -108,12 +127,11 @@
 
         water.addToRenderList(skybox);
         water.addToRenderList(ground);
+        water.addToRenderList(moon);
     
         river.material = water;
 
-
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-        //var advancedTexture2 = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI2");
 
         var timerBackground = new BABYLON.GUI.Rectangle();
         timerBackground.width = 0.2;
@@ -141,7 +159,10 @@
         buttonDaytime.background = "green";
         //var buttonEvt;
         buttonDaytime.onPointerUpObservable.add(function () {
-            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.2);
+            //SPS.dispose();
+            moon.isVisible=false; //////////////////////////// INI /////////////////
+            water.bumpHeight = 2; 
+            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.3);
         });
         advancedTexture.addControl(buttonDaytime);
 
@@ -157,8 +178,33 @@
         buttonSunset.onPointerUpObservable.add(function () {
             water.bumpHeight = 0.5; 
             setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
+            moon.isVisible=false;//////////////////////////// INI //////////////////
+           // SPS.dispose();
         });
         advancedTexture.addControl(buttonSunset);
+
+        //////////////////////////// INI /////////////////////////////////
+
+        var buttonNight = BABYLON.GUI.Button.CreateSimpleButton("buttonNight", "night");
+        buttonNight.width = 0.08;
+        buttonNight.height = 0.05;
+        buttonNight.top = "-45%";
+        buttonNight.left = "-8%";
+        buttonNight.color = "white";
+        buttonNight.fontSize = 16;
+        buttonNight.background = "green";
+ 
+        buttonNight.onPointerUpObservable.add(function () {
+            water.bumpHeight = 0.5; 
+            setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.7);
+
+            window.setTimeout(function () {
+                moon.isVisible=true;
+            }, 900);
+        });
+        advancedTexture.addControl(buttonNight);
+
+        ////////////////////////////////////////////////////////////////
 
         var buttonRain = BABYLON.GUI.Button.CreateSimpleButton("buttonRain", "rain");
         buttonRain.width = 0.08;
@@ -213,22 +259,21 @@
             particleSystem.particleTexture = new BABYLON.Texture("textures/flare.png", scene);
         
             // Where the particles come from
-            particleSystem.emitter = skybox; // the starting object, the emitter
-            particleSystem.minEmitBox = new BABYLON.Vector3(-100, 0, -100); // Starting all from
-            particleSystem.maxEmitBox = new BABYLON.Vector3(100, 0, 100); // To...
+            particleSystem.emitter = skybox2; // the starting object, the emitter
+            particleSystem.minEmitBox = new BABYLON.Vector3(-200, 0, -250); // Starting all from
+            particleSystem.maxEmitBox = new BABYLON.Vector3(200, 0, 75); // To...
         
             // Size of each particle (random between...
-            particleSystem.minSize = 0.1;
-            particleSystem.maxSize = 0.5;
+            particleSystem.minSize = 0.5;
+            particleSystem.maxSize = 0.8;
         
             // Life time of each particle (random between...
-            particleSystem.minLifeTime = 0.3;
+            particleSystem.minLifeTime = 4;
             particleSystem.maxLifeTime = 15;
         
             // Emission rate
             particleSystem.emitRate = 15000;
-        
-            // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
+    
             particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
         
             // Set the gravity of all particles
@@ -267,9 +312,6 @@
         });
         advancedTexture.addControl(buttonSnow);
 
-         
-        	
-
         engine.runRenderLoop(function(){
 
             camera.rotation.y = 0;
@@ -277,36 +319,6 @@
         });
 
 
-        /*document.getElementById("rain").onclick = function () { 
-            var postProcess = new BABYLON.DigitalRainPostProcess("DigitalRain", camera, 
-            {
-                font: "3px Monospace",
-                mixToNormal: 0.5,
-                mixToTile: 0.5        
-            });
-        };*/
-      /*  robotMain=new BABYLON.Mesh.CreateBox("robotMain",1.0,scene);
-        robotMain.isVisible=false;
-        robotMain.position.y=3;
-
-        /*BABYLON.SceneLoader.ImportMesh("","models/Vanquish/","coconut-tree.obj",scene,
-            function(newMeshes){
-                for(i=0; i<newMeshes; i++){
-                    newMeshes[i].parent=robotMain;
-                }
-            });*/
-       /* BABYLON.SceneLoader.ImportMesh("", "models/Vanquish/", "coconut-tree.obj", scene, function (newMeshes) {
-        // Set the target of the camera to the first imported mesh
-             camera.target = newMeshes[0];
-             newMeshes[0].scale.x=10;
-             newMeshes[0].scale.y=10;
-             newMeshes[0].scale.z=10;
-        });*/
-
-        /*engine.runRenderLoop(function(){
-            //box.position.x = box.position.x + 0.05; //The box moves to the right
-            scene.render();
-        });*/
     });
 
 </script>
