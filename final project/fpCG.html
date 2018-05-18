@@ -31,7 +31,7 @@
         scene = new BABYLON.Scene(engine);
 
         // Camera
-        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(5, 12, -200), scene);
+        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(5, 12, -125), scene);
         camera.setTarget(BABYLON.Vector3.Zero());
         camera.attachControl(canvas, true);
     
@@ -40,7 +40,7 @@
     
         // Ground
         // var ground = BABYLON.Mesh.CreateGroundFromHeightMap("ground", "textures/dirt_01.png", 100, 100, 100, 0, 10, scene, false);
-        ground = new BABYLON.Mesh.CreateGround("ground", 16*30, 16*30, 30, scene);
+        ground = new BABYLON.Mesh.CreateGround("ground", 500, 500, 300, scene);
         var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
         groundMaterial.diffuseTexture = new BABYLON.Texture("textures/TexturesCom_Grass0027_7_S.jpg", scene);
         groundMaterial.diffuseTexture.uScale = 6;
@@ -49,9 +49,9 @@
         ground.position.y = -2.05;
         ground.material = groundMaterial;
 
-        //////////////////////////// INI /////////////////////////////////////
+
         var moon = BABYLON.Mesh.CreateSphere("boxCloud", 5, 11, scene);
-        moon.position = new BABYLON.Vector3(0, 35, -2);
+        moon.position = new BABYLON.Vector3(0, 40, 90);
 
         var starMoonMaterial = new BABYLON.StandardMaterial("starMoonMat", scene);
         var starMoonProcText = new BABYLON.CloudProceduralTexture("starMoon", 1024, scene);
@@ -62,6 +62,32 @@
         moon.material = starMoonMaterial;
         moon.isVisible=false;
 
+        ///////////////// INI2 //////////////////////////////
+
+        // custom position function for SPS creation
+        var starPosition = function(particle, i, s) {
+            particle.position.x = Math.floor(Math.random() * (325 - (-350) + 1)) + (-350);
+            particle.position.y = Math.floor(Math.random() * (200 - (0) + 1)) + (0);
+            particle.position.z = Math.floor(Math.random() * (300 - (200) + 1)) + (200);
+        };
+
+        var starPosition2 = function(particle, i, s) {
+            particle.position.x = 100;
+            particle.position.y = -100;
+            particle.position.z = 100;
+        };
+
+        
+        var star = BABYLON.Mesh.CreateSphere("boxCloud", 5, 1, scene);
+        star.material = starMoonMaterial;
+  
+        // SPS creation
+        var SPS = new BABYLON.SolidParticleSystem('SPS', scene);
+        SPS.addShape(star, 1000);
+        var mesh = SPS.buildMesh();
+        // dispose the model
+        star.dispose();
+
         ////////////////////////////////////////////////////////////////////
 
         // Sky material
@@ -70,7 +96,7 @@
         //skyboxMaterial._cachedDefines.FOG = true;
 
         // Sky mesh (box)
-        var skybox = BABYLON.Mesh.CreatePlane("sky", 1000.0, scene);
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
         skybox.position = new BABYLON.Vector3(0, 75, 0);
         skybox.material = skyboxMaterial;
 
@@ -104,6 +130,76 @@
 
        // var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
+       // MODEL //
+
+        var walls = BABYLON.Mesh.CreateBox("walls", 20, scene);
+        walls.position = new BABYLON.Vector3(82, 10, 38);
+        walls.scaling.x=0.7;
+        walls.scaling.y=2.1;
+        walls.scaling.z=0.3;
+
+        var wallsMaterial = new BABYLON.StandardMaterial("wallsMaterial", scene);
+        wallsMaterial.diffuseTexture = new BABYLON.Texture("textures/brick.jpg", scene);
+        walls.material = wallsMaterial;
+
+        //robotMain.position.y = 3;
+        //robotMain.physicsImpostor = new BABYLON.PhysicsImpostor(robotMain, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 1, restitution: 0.5, friction: 0.2}, scene);
+
+        var speed=0.01;
+        var siren = new BABYLON.Mesh.CreateBox("siren", 1.0, scene);
+        siren.actionManager = new BABYLON.ActionManager(scene);
+
+        siren.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+            if(speed<0.1)
+                speed=speed+0.02;
+            else
+                speed=0.01;
+        }));
+
+        BABYLON.SceneLoader.ImportMesh("", "rotor/", "Rotor8_fixed.stl", scene, function(newMeshes){
+            for(i = 0; i < 4; i++){
+                newMeshes[i].parent = siren;
+                siren.position.z=25;
+                siren.position.y=30;
+                siren.position.x=80;
+                siren.rotation.x = 1.57;
+
+                siren.scaling.x=siren.scaling.x-0.3;
+                siren.scaling.y=siren.scaling.y-0.3;
+                siren.scaling.z=siren.scaling.z-0.3;
+                //robotMain.scaling.y=10;
+            }
+        });
+
+        var bridge = new BABYLON.Mesh.CreateBox("bridge", 1.0, scene);
+        bridge.isVisible=false;
+        bridge.actionManager = new BABYLON.ActionManager(scene);
+
+        BABYLON.SceneLoader.ImportMesh("", "bridge/", "bridge2.babylon", scene, function(newMeshes){
+            for(i = 0; i < newMeshes.length; i++){
+                /*newMeshes[i].position.z=newMeshes[i].position.z+5;
+                newMeshes[i].position.y=newMeshes[i].position.y+5;
+                newMeshes[i].position.x=newMeshes[i].position.x-15;
+                newMeshes[i].rotation.y = 3;
+                newMeshes[i].scaling.x=newMeshes[i].scaling.x+1;
+                newMeshes[i].scaling.y=newMeshes[i].scaling.y+1;
+                newMeshes[i].scaling.z=newMeshes[i].scaling.z+1;*/
+
+                newMeshes[i].parent = bridge;
+                bridge.position.z=12;
+                bridge.position.y=5;
+                bridge.position.x=-15;
+                bridge.rotation.y = Math.PI/2;
+
+                bridge.scaling.x=bridge.scaling.x+0.9;
+                bridge.scaling.y=bridge.scaling.y+0.9;
+                bridge.scaling.z=bridge.scaling.z+0.9;
+                
+            }
+        });
+
+               
+
        // Water
         var river = BABYLON.Mesh.CreatePlane("test", 100, scene); 
         river.rotation.x = 1.57;
@@ -119,8 +215,8 @@
         water.waveLength = 0.5;
 
         river.scaling.y=0.7; // ukuran lebar
-        river.scaling.x=6; // ukuran panjang
-        river.position.z = -120; //deket jauhnya ke dpan belakang (kalo mo jauhan/deketan ke camera)
+        river.scaling.x=4.3; // ukuran panjang
+        river.position.z = -30; //deket jauhnya ke dpan belakang (kalo mo jauhan/deketan ke camera)
         //waterMesh1.alpha=0.5;
         water.colorBlendFactor = 0;
         water.windDirection = new BABYLON.Vector2(-0.8, 0.4);// atur arah arus bisa disini
@@ -128,6 +224,9 @@
         water.addToRenderList(skybox);
         water.addToRenderList(ground);
         water.addToRenderList(moon);
+        water.addToRenderList(siren);
+        water.addToRenderList(walls);
+        water.addToRenderList(bridge);
     
         river.material = water;
 
@@ -160,9 +259,17 @@
         //var buttonEvt;
         buttonDaytime.onPointerUpObservable.add(function () {
             //SPS.dispose();
-            moon.isVisible=false; //////////////////////////// INI /////////////////
+            moon.isVisible=false; 
             water.bumpHeight = 2; 
             setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.3);
+            /////////////////////////// INI2 /////////////////
+            SPS.initParticles = function () {
+                for (var p = 0; p < SPS.nbParticles; p++) {
+                    starPosition2(SPS.particles[p]);
+                }
+            }
+            SPS.initParticles();
+            SPS.setParticles();
         });
         advancedTexture.addControl(buttonDaytime);
 
@@ -178,12 +285,19 @@
         buttonSunset.onPointerUpObservable.add(function () {
             water.bumpHeight = 0.5; 
             setSkyConfig("material.inclination", skyboxMaterial.inclination, -0.5);
-            moon.isVisible=false;//////////////////////////// INI //////////////////
+            moon.isVisible=false;
+            //////////////////////////// INI2 //////////////////
+            SPS.initParticles = function () {
+                for (var p = 0; p < SPS.nbParticles; p++) {
+                    starPosition2(SPS.particles[p]);
+                }
+            }
+            SPS.initParticles();
+            SPS.setParticles();
            // SPS.dispose();
         });
         advancedTexture.addControl(buttonSunset);
 
-        //////////////////////////// INI /////////////////////////////////
 
         var buttonNight = BABYLON.GUI.Button.CreateSimpleButton("buttonNight", "night");
         buttonNight.width = 0.08;
@@ -200,11 +314,18 @@
 
             window.setTimeout(function () {
                 moon.isVisible=true;
+                ////////////////////// INI2//////////////////
+                SPS.initParticles = function () {
+                    for (var p = 0; p < SPS.nbParticles; p++) {
+                        starPosition(SPS.particles[p]);
+                    }
+                }
+                SPS.initParticles();
+                SPS.setParticles();
             }, 900);
         });
         advancedTexture.addControl(buttonNight);
 
-        ////////////////////////////////////////////////////////////////
 
         var buttonRain = BABYLON.GUI.Button.CreateSimpleButton("buttonRain", "rain");
         buttonRain.width = 0.08;
@@ -312,9 +433,10 @@
         });
         advancedTexture.addControl(buttonSnow);
 
-        engine.runRenderLoop(function(){
 
-            camera.rotation.y = 0;
+        engine.runRenderLoop(function(){
+            siren.rotate(BABYLON.Axis.Y, speed, BABYLON.Space.LOCAL);
+           // camera.rotation.y = 0;
             scene.render();
         });
 
