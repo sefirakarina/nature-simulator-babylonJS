@@ -1,0 +1,27 @@
+	Exporter version: 4.6.1, Blender version: 2.79 (sub 0)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used:
+		selected layers only:  false
+		flat shading entire scene:  false
+		inline textures:  false
+		texture directory:  C:\Users\sefir\Desktop\4rd semester\Computer Graphics\Lab CG\CG Ball\CG Ball\tree\
+	Python World class constructor completed
+	WARNING: No active camera has been assigned, or is not in a currently selected Blender layer
+	processing begun of node:  LightPreset
+	processing begun of mesh:  Prunus_americana_01
+		processing begun of Standard material:  Trunk
+		processing begun of Standard material:  wire_086086086
+		processing begun of multimaterial:  tree.Multimaterial#0
+		WARNING: Due to multi-materials / Shapekeys & this meshes size, 32bit indices must be used.  This may not run on all hardware.
+		num positions      :  244753
+		num normals        :  244753
+		num uvs            :  489506
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  872250
+	processing begun of light (HEMI):  Sky_Light
+	processing begun of light (SUN):  Sun_Light
+========= Writing of scene file started =========
+========= Writing of scene file completed =========
+========= end of processing =========
+elapsed time:  0 min, 19.5937 secs
