@@ -272,7 +272,7 @@
 
        // Water
         var river = BABYLON.Mesh.CreatePlane("test", 100, scene); 
-        river.rotation.x = 1.57;
+        river.rotation.x = Math.PI/2;
         //waterMesh1.rotation.x += Math.PI/2;
 
     
@@ -301,36 +301,38 @@
         river.material = water;
         //////////////////////
         ///////////////////////////
-        var particleSystem = new BABYLON.ParticleSystem("particles", 10000, scene);
-        
+        // Create a particle system
+        var particleSystem = new BABYLON.ParticleSystem("particles", 25000, scene);
+
         //Texture of each particle
         particleSystem.particleTexture = new BABYLON.Texture("textures/flare.png", scene);
-        
+
         // Where the particles come from
         particleSystem.emitter = skybox2; // the starting object, the emitter
         particleSystem.minEmitBox = new BABYLON.Vector3(-200, 0, -250); // Starting all from
         particleSystem.maxEmitBox = new BABYLON.Vector3(200, 0, 75); // To...
-        
+
         // Size of each particle (random between...
         particleSystem.minSize = 0.5;
         particleSystem.maxSize = 0.8;
-        
+
         // Life time of each particle (random between...
         particleSystem.minLifeTime = 4;
         particleSystem.maxLifeTime = 15;
-        
+
         // Emission rate
         particleSystem.emitRate = 15000;
-    
+
+        // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
         particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
-        
+
         // Set the gravity of all particles
         particleSystem.gravity = new BABYLON.Vector3(0, -9.81, 0);
-        
+
         // Direction of each particle after it has been emitted
         particleSystem.direction1 = new BABYLON.Vector3(-7, -8, 3);
         particleSystem.direction2 = new BABYLON.Vector3(7, -8, -3);
-        
+
         // Speed
         particleSystem.minEmitPower = 1;
         particleSystem.maxEmitPower = 3;
@@ -342,8 +344,8 @@
         ////////////////////
         var snowMaxSpeedpanel = new BABYLON.GUI.StackPanel();
         snowMaxSpeedpanel.width = "220px";
-        snowMaxSpeedpanel.top = "-30%";
-        snowMaxSpeedpanel.left = "-43%";
+        snowMaxSpeedpanel.top = "-27%";
+        snowMaxSpeedpanel.left = "-40%";
         advancedTexture.addControl(snowMaxSpeedpanel);
 
         var snowMaxSpeedheader = new BABYLON.GUI.TextBlock();
@@ -363,6 +365,29 @@
         });
         snowMaxSpeedpanel.addControl(snowMaxSpeedslider);
         ////////////////
+        var snowEmitRatepanel = new BABYLON.GUI.StackPanel();
+        snowEmitRatepanel.width = "220px";
+        snowEmitRatepanel.top = "-37%";
+        snowEmitRatepanel.left = "-40%";
+        advancedTexture.addControl(snowEmitRatepanel);
+
+        var snowEmitRateheader = new BABYLON.GUI.TextBlock();
+        snowEmitRateheader.text = "snow emit rate: " +particleSystem.emitRate;
+        snowEmitRateheader.height = "30px";
+        snowEmitRateheader.color = "white";
+        snowEmitRatepanel.addControl(snowEmitRateheader); 
+
+        var snowEmitRateslider = new BABYLON.GUI.Slider();
+        snowEmitRateslider.minimum = 1000;
+        snowEmitRateslider.maximum = 50000;
+        snowEmitRateslider.value = 0;
+        snowEmitRateslider.height = "15px";
+        snowEmitRateslider.width = "150px";
+        snowEmitRateslider.onValueChangedObservable.add(function(value) {
+            snowEmitRateheader.text = "snow emit rate: " + Math.round(value) ;
+        });
+        snowEmitRatepanel.addControl(snowEmitRateslider);
+        ///////////////////
 
         var timerBackground = new BABYLON.GUI.Rectangle();
         timerBackground.width = 0.2;
@@ -524,6 +549,10 @@
             snowMaxSpeedslider.onValueChangedObservable.add(function(value) {
                 snowMaxSpeedheader.text = "snow max speed: " + Math.round(value);
                 particleSystem.maxEmitPower = value;
+            });
+            snowEmitRateslider.onValueChangedObservable.add(function(value) {
+                snowEmitRateheader.text = "snow emit rate: " + Math.round(value) ;
+                particleSystem.emitRate = value;
             });
 
             // var timeleft = 10;
