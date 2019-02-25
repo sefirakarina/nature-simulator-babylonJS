@@ -1,0 +1,140 @@
+	Exporter version: 4.6.1, Blender version: 2.79 (sub 0)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used:
+		selected layers only:  false
+		flat shading entire scene:  false
+		inline textures:  false
+		texture directory:  C:\Users\Sefira Karina\Downloads\medieval-house\
+	Python World class constructor completed
+	WARNING: No active camera has been assigned, or is not in a currently selected Blender layer
+	processing begun of mesh:  WindowsHandles
+		animation processing begun
+			processing action ChimneyAction:  in[1 - 1], out[0 - 1]
+			processing action ChimneyPipesAction:  in[1 - 1], out[10 - 11]
+			processing action DoorBackAction:  in[1 - 1], out[20 - 21]
+			processing action DoorBackFrameAction:  in[1 - 1], out[30 - 31]
+			processing action DoorBackHandleAction:  in[1 - 1], out[40 - 41]
+			processing action DoorBackStepsAction:  in[1 - 1], out[50 - 51]
+			processing action DoorFrontAction:  in[1 - 1], out[60 - 61]
+			processing action DoorFrontFrameAction:  in[1 - 1], out[70 - 71]
+			processing action DoorFrontHandleAction:  in[1 - 1], out[80 - 81]
+			processing action DoorSideAction:  in[1 - 1], out[90 - 91]
+			processing action DoorSideFrameAction:  in[1 - 1], out[100 - 101]
+			processing action DoorSideHandleAction:  in[1 - 1], out[110 - 111]
+			processing action DoorSideStepsAction:  in[1 - 1], out[120 - 121]
+			processing action Level1Action:  in[1 - 1], out[130 - 131]
+			processing action Level2Action:  in[1 - 1], out[140 - 141]
+			processing action Level3Action:  in[1 - 1], out[150 - 151]
+			processing action RoofAction:  in[1 - 1], out[160 - 161]
+			processing action RoofFrameAction:  in[1 - 1], out[170 - 171]
+			processing action StepsAction:  in[1 - 1], out[180 - 181]
+			processing action Window1Level1Action:  in[1 - 1], out[190 - 191]
+			processing action Window1Level2Action:  in[1 - 1], out[200 - 201]
+			processing action Window1Level3Action:  in[1 - 1], out[210 - 211]
+			processing action Window2Level1Action:  in[1 - 1], out[220 - 221]
+			processing action Window2Level2Action:  in[1 - 1], out[230 - 231]
+			processing action Window2Level3Action:  in[1 - 1], out[240 - 241]
+			processing action Window3Level1Action:  in[1 - 1], out[250 - 251]
+			processing action Window3Level2Action:  in[1 - 1], out[260 - 261]
+			processing action Window3Level3Action:  in[1 - 1], out[270 - 271]
+			processing action Window4Level1Action:  in[1 - 1], out[280 - 281]
+			processing action Window4Level2Action:  in[1 - 1], out[290 - 291]
+			processing action Window5Level1Action:  in[1 - 1], out[300 - 301]
+			processing action Window5Level2Action:  in[1 - 1], out[310 - 311]
+			processing action Window6Level1Action:  in[1 - 1], out[320 - 321]
+			processing action Window6Level2Action:  in[1 - 1], out[330 - 331]
+			processing action WindowFramesAction:  in[1 - 1], out[340 - 341]
+			processing action WindowsHandlesAction:  in[1 - 1], out[350 - 351]
+			processing action WoodenBeamsAction:  in[1 - 1], out[360 - 361]
+		processing begun of Standard material:  RustedMetal__Rusted_Metal_jpg
+			Diffuse texture found "Rusted_Metal_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "Rusted_Metal_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  WindowBlue1__WindowBlue1
+			Diffuse texture found "WindowBlue1_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "WindowBlue1_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  GreyStone2__GreyStone2_jpg
+			Diffuse texture found "Stone_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "Stone_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  Plaster__PlasterLarge_jpg
+			Diffuse texture found "PlasterLarge_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "PlasterLarge_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  LogEdgeWeathered__TreeLogEdgeWeathered_jpg
+			Diffuse texture found "TreeLogEdgeWeathered_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "TreeLogEdgeWeathered_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  Wood__Wood_jpg
+			Diffuse texture found "Wood_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "Wood_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  Stone__Stone_jpg
+			Diffuse texture found "Stone_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "Stone_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  DoorType1_2__DoorType1_2_jpg
+			Diffuse texture found "DoorType1_2_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "DoorType1_2_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  LogEdgeWeathered__Wood_jpg
+			Diffuse texture found "TreeLogEdgeWeathered_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "TreeLogEdgeWeathered_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  LogEdgeWeathered__Wood_jpg_002
+			Diffuse texture found "TreeLogEdgeWeathered_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "TreeLogEdgeWeathered_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  Wood_001
+			Diffuse texture found "Wood_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "Wood_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  Wood_001__Wood_jpg
+			Diffuse texture found "Wood_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "Wood_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  WindowBlue2__WindowsBlue2_jpg
+			Diffuse texture found "WindowsBlue2_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "WindowsBlue2_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  Brick__GreyBricks_jpg
+			Diffuse texture found "GreyBricks2_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "GreyBricks2_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  RoofTiles__RoofTiles_jpg
+			Diffuse texture found "RoofTiles_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "RoofTiles_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of Standard material:  GreyBrick2__GreyBricks2_jpg
+			Diffuse texture found "GreyBricks2_jpg"
+				Image texture found, type:  diffuseTexture, mapped using: "0"
+			Bump texture found "GreyBricks2_jpg"
+				Image texture found, type:  bumpTexture, mapped using: "0"
+		processing begun of multimaterial:  medieval_house_2.Multimaterial#0
+		num positions      :  15502
+		num normals        :  15502
+		num uvs            :  31004
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  36714
+	processing begun of node:  LightPreset
+========= Writing of scene file started =========
+========= Writing of scene file completed =========
+========= end of processing =========
+elapsed time:  0 min, 4.4853 secs
