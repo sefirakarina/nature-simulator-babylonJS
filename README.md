@@ -6,8 +6,25 @@ This application is a simulation of the nature. The application will show a  sce
 ### Third party API and framework
 This project was made using WebGL and BabylonJS. Web Graphics or WebGL is a JavaScript API for rendering interactive 3D and 2D graphics within any compatible web browser without the use of plug-ins, and BabylonJS is complete JavaScript framework for building 3D games and experiences with HTML5, WebGL, WebVR and Web Audio.
 
-### models
+### models and textures
 For most of the models, we use imported 3D models that we found on the internet. The credits and sources can be seen [here](https://github.com/sefirakarina/nature-simulator-babylonJS/blob/master/credits.txt)
+
+here are several things that are textured, and thus are:
+- Imported textures for ground, windmill, and all the particles (grass, snowy ground, brick, rain particle, snow particle, lightning).
+- BABYLON.SkyMaterial for skybox texture.
+- BABYLON.WaterMaterial for the river.
+- BABYLON.FireMaterial for the fire.
+
+### interactivity 
+In this project, most of the user interaction happens through BABYLON GUI. Types of BABYLON GUI we used are buttons and sliders. The buttons include daytime, sunset, night, rain, snow,  fog, and three other buttons to stop the rain, snow, and fog. 
+
+We also used BABYLON.SkyMaterial. With this, we are able to give effects to the skybox. The skybox will be able to reproduce and configure the sky taking care of the atmosphere state. In other words, for example, determine how the light (from sun) is scattered.  For changing between daytime and sunset, BABYLON.Animation is used. In the animation, we changed the inclination of the sun. The user can change from daytime, dusk, and night through BABYLON GUI buttons.
+
+We also have some weather features, including rain, snow, fog, and wind that the user can interact with. For the snow, rain, and lightning we use Babylon’s ParticleSystem feature. For the fog we use  BABYLON fogMode. Users are able to change the intensity of the rain, snow, and fog through BABYLON GUI’s sliders.
+Other than that, when user push the rain button, the lightning strike button will appear. When the lightning strike button is being pushed, the lightning will appear to be closer to the camera, and a fire will appear to burn the tree, after a few seconds the tree will fall down and then the fire will go off. We use BABYLON.Animation to animate the fire and tree.
+
+Users are also able to control the speed of the wind. The wind affects things such as the river flow, and rotation speed of the siren and merry go round. The user can also interact with some of the models by clicking them. For example, the tree will fall (using BABYLON.Animation) if the user click the bottom part of it, and the rotor will spin faster to a certain speed if the center of it is being clicked.
+
 
 ### Application manual
 Once you open the application, you will see a scenery of nature in a sunny state. In this simulator, there are a few models, buttons and also sliders for users to interact with.
